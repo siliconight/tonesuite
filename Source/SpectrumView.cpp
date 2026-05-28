@@ -9,8 +9,8 @@ namespace
     const juce::Colour kSpectrumLine { 0x88c9a227 };
     const juce::Colour kCurveLine    { 0xfff2e6c8 };
     const juce::Colour kCurveFill    { 0x22f2e6c8 };
-    const juce::Colour kpassive program EQBoost  { 0xffc9a227 };
-    const juce::Colour kpassive program EQCut    { 0xff5a8fc4 };
+    const juce::Colour kEqBoost  { 0xffc9a227 };
+    const juce::Colour kEqCut    { 0xff5a8fc4 };
     const juce::Colour kDyn1         { 0xffe07a5f };
     const juce::Colour kDyn2         { 0xff81b29a };
     const juce::Colour kDyn3         { 0xff8ab4f8 };
@@ -80,7 +80,7 @@ void SpectrumView::buildHandles()
     {
         Handle h;
         h.name  = "Low Boost";
-        h.color = kpassive program EQBoost;
+        h.color = kEqBoost;
         h.getFreq    = [&v, getF] { return ToneSuiteAudioProcessor::kLowFreqs[(size_t) juce::jlimit (0, 3, (int) getF ("lowFreq"))]; };
         h.getGainDb  = [getF] { return  (getF ("lowBoost") / 10.0f) * ToneSuiteAudioProcessor::kLowBoostMaxDb; };
         h.getQ       = [] { return 0.0f; };
@@ -101,7 +101,7 @@ void SpectrumView::buildHandles()
     {
         Handle h;
         h.name  = "Low Atten";
-        h.color = kpassive program EQCut;
+        h.color = kEqCut;
         h.isCut = true;
         h.getFreq    = [&v, getF] { return ToneSuiteAudioProcessor::kLowFreqs[(size_t) juce::jlimit (0, 3, (int) getF ("lowFreq"))]; };
         h.getGainDb  = [getF] { return -(getF ("lowAtten") / 10.0f) * ToneSuiteAudioProcessor::kLowAttenMaxDb; };
@@ -123,7 +123,7 @@ void SpectrumView::buildHandles()
     {
         Handle h;
         h.name  = "High Boost";
-        h.color = kpassive program EQBoost;
+        h.color = kEqBoost;
         h.getFreq    = [getF] { return ToneSuiteAudioProcessor::kHighBoostFreqs[(size_t) juce::jlimit (0, 6, (int) getF ("highFreq"))]; };
         h.getGainDb  = [getF] { return (getF ("highBoost") / 10.0f) * ToneSuiteAudioProcessor::kHighBoostMaxDb; };
         h.getQ       = [getF] { return juce::jmap (getF ("highBW"), 0.0f, 10.0f, 0.6f, 3.5f); };
@@ -148,7 +148,7 @@ void SpectrumView::buildHandles()
     {
         Handle h;
         h.name  = "High Atten";
-        h.color = kpassive program EQCut;
+        h.color = kEqCut;
         h.isCut = true;
         h.getFreq    = [getF] { return ToneSuiteAudioProcessor::kHighAttenFreqs[(size_t) juce::jlimit (0, 2, (int) getF ("highAttenFreq"))]; };
         h.getGainDb  = [getF] { return -(getF ("highAtten") / 10.0f) * ToneSuiteAudioProcessor::kHighAttenMaxDb; };
