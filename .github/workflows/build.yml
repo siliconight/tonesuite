@@ -1,0 +1,86 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+    tags:     ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    name: macOS Universal Build
+    runs-on: macos-14   # Apple Silicon runner; uses Xcode 15+
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Cache JUCE (FetchContent)
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          # Bump this key suffix if you change the JUCE GIT_TAG in CMakeLists.txt
+          key: juce-8.0.4-${{ runner.os }}-${{ runner.arch }}-v1
+
+      - name: Configure
+        run: |
+          cmake -B build -G Xcode \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: List output
+        run: |
+          echo "--- AU ---"
+          find build -name "*.component" -maxdepth 6 -type d || true
+          echo "--- VST3 ---"
+          find build -name "*.vst3"      -maxdepth 6 -type d || true
+          echo "--- Standalone ---"
+          find build -name "*.app"       -maxdepth 6 -type d || true
+
+      - name: Validate AU with auval
+        run: |
+          AU_SRC="$(find build -name '*.component' -maxdepth 6 -type d | head -n1)"
+          if [[ -n "$AU_SRC" ]]; then
+            DEST="$HOME/Library/Audio/Plug-Ins/Components/$(basename "$AU_SRC")"
+            mkdir -p "$(dirname "$DEST")"
+            ditto "$AU_SRC" "$DEST"
+            # Strip quarantine; ad-hoc-signed plugins are otherwise blocked
+            xattr -cr "$DEST"
+            killall -9 AudioComponentRegistrar 2>/dev/null || true
+            sleep 2
+            auval -v aufx Pteq Yorc || {
+              echo "::warning::auval validation failed - plugin may not show in Logic"
+              exit 0
+            }
+          else
+            echo "::warning::no .component built"
+          fi
+
+      - name: Package artifacts
+        run: |
+          mkdir -p artifacts
+          AU="$(find build -name '*.component' -maxdepth 6 -type d | head -n1)"
+          V3="$(find build -name '*.vst3'      -maxdepth 6 -type d | head -n1)"
+          [[ -n "$AU" ]] && ditto "$AU" "artifacts/$(basename "$AU")"
+          [[ -n "$V3" ]] && ditto "$V3" "artifacts/$(basename "$V3")"
+          cd artifacts && zip -r ../ToneSuite-macOS.zip . && cd -
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToneSuite-macOS
+          path: ToneSuite-macOS.zip
+          retention-days: 30
+
+      - name: Attach to release (tag push only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ToneSuite-macOS.zip
+          generate_release_notes: true

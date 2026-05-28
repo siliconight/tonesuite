@@ -1,0 +1,75 @@
+# ---- Build output ----
+build/
+build-*/
+out/
+cmake-build-*/
+
+# ---- CMake ----
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+Testing/
+CMakeUserPresets.json
+_deps/
+
+# ---- Xcode ----
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+*.xcuserstate
+DerivedData/
+
+# ---- Visual Studio ----
+.vs/
+*.vcxproj.user
+*.suo
+*.sdf
+*.opensdf
+ipch/
+Debug/
+Release/
+x64/
+x86/
+
+# ---- VS Code / CLion ----
+.vscode/
+.idea/
+.cache/
+compile_commands.json
+.clangd/
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- Linux ----
+*~
+.directory
+
+# ---- Windows ----
+Thumbs.db
+Desktop.ini
+
+# ---- Misc ----
+*.log
+*.tlog
+*.iobj
+*.ipdb
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+
+# ---- JUCE ----
+JuceLibraryCode/
+Builds/
