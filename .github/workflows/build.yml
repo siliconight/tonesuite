@@ -22,7 +22,7 @@ jobs:
         with:
           path: build/_deps
           # Bump this key suffix if you change the JUCE GIT_TAG in CMakeLists.txt
-          key: juce-8.0.4-${{ runner.os }}-${{ runner.arch }}-v1
+          key: juce-8.0.4-${{ runner.os }}-${{ runner.arch }}-v2
 
       - name: Configure
         run: |
