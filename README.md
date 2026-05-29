@@ -4,9 +4,6 @@ A JUCE-based **AU / VST3 / Standalone** mastering chain plugin: passive program
 EQ + variable-mu compressor + dynamic EQ + tape stage + dynamic resonance
 suppressor, driven from a single interactive spectrum display.
 
-> **Name placeholder.** "Toney" is a generic working name. Pick your own
-> before publishing - see [Renaming](#renaming) below.
-
 ## What it does
 
 A single-canvas mastering processor with five stages in series. Default chain:
@@ -109,8 +106,9 @@ then reopen Logic.
 
 ### Renaming
 
-The 4-character codes `Pteq` / `Yorc` and the name "Toney" are
-placeholders. Edit `CMakeLists.txt` to publish under your own name:
+The 4-character codes `Pteq` / `Yorc` are placeholders that need to be
+unique across every AU on your machine. If `auval` ever fails with a
+collision, edit `CMakeLists.txt` and pick different ones:
 
 ```cmake
 COMPANY_NAME             "YourActualName"
