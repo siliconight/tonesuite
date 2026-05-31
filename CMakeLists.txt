@@ -39,9 +39,9 @@ FetchContent_MakeAvailable(JUCE)
 # below are not registered; for a release you should pick your own.
 # ---------------------------------------------------------------------------
 juce_add_plugin(Toney
-    COMPANY_NAME            "YourCompany"
+    COMPANY_NAME              "GabagoolStudios"
     BUNDLE_ID               "com.yourcompany.toney"
-    PLUGIN_MANUFACTURER_CODE Yorc     # 4 chars, must contain >=1 uppercase
+    PLUGIN_MANUFACTURER_CODE Gaba     # 4 chars, must contain >=1 uppercase
     PLUGIN_CODE             Pteq      # 4 chars, must contain >=1 uppercase
     FORMATS                 AU VST3 Standalone
     PRODUCT_NAME            "Toney"

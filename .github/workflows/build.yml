@@ -54,7 +54,7 @@ jobs:
             xattr -cr "$DEST"
             killall -9 AudioComponentRegistrar 2>/dev/null || true
             sleep 2
-            auval -v aufx Pteq Yorc || {
+            auval -v aufx Pteq Gaba || {
               echo "::warning::auval validation failed - plugin may not show in Logic"
               exit 0
             }
